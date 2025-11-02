@@ -50,8 +50,10 @@ class CeylonPOSApp {
         this.authController.setLoginCallback(this.onLogin.bind(this));
         this.authController.setLogoutCallback(this.onLogout.bind(this));
 
-        // Set up customer update callback for dashboard
+        // Set up update callbacks for dashboard
         this.customerController.setOnCustomerUpdate(this.refreshDashboard.bind(this));
+        this.productController.setOnProductUpdate(this.refreshDashboard.bind(this));
+        this.orderController.setOnOrderUpdate(this.refreshDashboard.bind(this));
 
         // Load sample data if empty
         this.loadSampleData();
@@ -76,8 +78,7 @@ class CeylonPOSApp {
                     this.orderController.showOrderForm();
                     break;
                 case 'order-history':
-                    // Implement order history view
-                    console.log('Order history section not yet implemented');
+                    this.orderController.showOrderHistory();
                     break;
             }
         });
@@ -98,6 +99,7 @@ class CeylonPOSApp {
             this.dashboardController.showDashboard();
         }
     }
+
     loadSampleData() {
         // Load sample customers if empty
         if (this.customerModel.getAllCustomers().length === 0) {
@@ -145,10 +147,7 @@ class CeylonPOSApp {
             console.log('Sample product data loaded');
         }
     }
-
 }
-
-
 
 // Initialize the application when DOM is ready
 $(document).ready(function() {

@@ -302,16 +302,207 @@
 
             <!-- Orders Section -->
             <div id="orders-section" class="section hidden">
-                <!-- Order management UI -->
+                <h2>Place New Order</h2>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- Customer Selection -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user me-2"></i>Customer Information
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <label for="order-customer" class="form-label">Select Customer *</label>
+                                        <select class="form-select" id="order-customer" required>
+                                            <option value="">Choose a customer...</option>
+                                            <!-- Customers will be populated here -->
+                                        </select>
+                                        <div class="invalid-feedback">Please select a customer</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Customer Details</label>
+                                        <div id="customer-details" class="text-muted small">
+                                            Select a customer to view details
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Items -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-shopping-cart me-2"></i>Order Items
+                                </h5>
+                                <span class="badge bg-light text-dark" id="items-count">0 items</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="order-items">
+                                    <div class="text-center text-muted py-4">
+                                        <i class="fas fa-cart-plus fa-2x mb-3"></i>
+                                        <p>No items added to order</p>
+                                        <small>Click on products from the available list to add them</small>
+                                    </div>
+                                </div>
+
+                                <!-- Order Summary -->
+                                <div class="card mt-4 bg-light">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h6>Order Summary</h6>
+                                                <table class="table table-sm table-borderless">
+                                                    <tr>
+                                                        <td>Subtotal:</td>
+                                                        <td class="text-end" id="order-subtotal">LKR 0.00</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tax (0%):</td>
+                                                        <td class="text-end" id="order-tax">LKR 0.00</td>
+                                                    </tr>
+                                                    <tr class="fw-bold fs-5">
+                                                        <td>Total:</td>
+                                                        <td class="text-end" id="order-total">LKR 0.00</td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <div class="col-md-6 d-flex align-items-end justify-content-end">
+                                                <button class="btn btn-success btn-lg" id="place-order-btn" disabled>
+                                                    <i class="fas fa-check me-2"></i>Place Order
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- Available Products -->
+                        <div class="card mb-4">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-boxes me-2"></i>Available Products
+                                </h5>
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" class="form-control" placeholder="Search..." id="product-search-order">
+                                    <button class="btn btn-outline-light" type="button">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="available-items-list" style="max-height: 500px; overflow-y: auto;">
+                                    <!-- Available items will be listed here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="card">
+                            <div class="card-header bg-warning text-dark">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-bolt me-2"></i>Quick Actions
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary btn-sm" id="clear-order-btn">
+                                        <i class="fas fa-broom me-1"></i>Clear Order
+                                    </button>
+                                    <button class="btn btn-outline-secondary btn-sm" id="add-sample-items">
+                                        <i class="fas fa-magic me-1"></i>Add Sample Items
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Order History Section -->
             <div id="order-history-section" class="section hidden">
-                <!-- Order history UI -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Order History</h2>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-primary" id="refresh-orders">
+                            <i class="fas fa-sync-alt me-1"></i>Refresh
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Order Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="date-filter" class="form-label">Date Range</label>
+                                <select class="form-select" id="date-filter">
+                                    <option value="all">All Time</option>
+                                    <option value="today">Today</option>
+                                    <option value="week">This Week</option>
+                                    <option value="month">This Month</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="customer-filter" class="form-label">Customer</label>
+                                <select class="form-select" id="customer-filter">
+                                    <option value="all">All Customers</option>
+                                    <!-- Customers will be populated here -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status-filter" class="form-label">Status</label>
+                                <select class="form-select" id="status-filter">
+                                    <option value="all">All Status</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button class="btn btn-outline-secondary w-100" id="clear-order-filters">
+                                    <i class="fas fa-times me-1"></i>Clear Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Order History</h6>
+                        <span class="badge bg-primary" id="orders-count">0 orders</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total (LKR)</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="order-history-table-body">
+                                <!-- Order history will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
 <!-- External Libraries -->
 <script src="lib/jquery.js"></script>
