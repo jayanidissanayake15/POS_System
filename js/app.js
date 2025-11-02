@@ -98,7 +98,6 @@ class CeylonPOSApp {
             this.dashboardController.showDashboard();
         }
     }
-
     loadSampleData() {
         // Load sample customers if empty
         if (this.customerModel.getAllCustomers().length === 0) {
@@ -119,8 +118,37 @@ class CeylonPOSApp {
             });
             console.log('Sample customer data loaded');
         }
+
+        // Load sample products if empty
+        if (this.productModel.getAllProducts().length === 0) {
+            console.log('Loading sample product data...');
+            const sampleProducts = [
+                { code: 'CEY-TEA-001', name: 'Ceylon Black Tea (500g)', price: 1250.00, quantity: 50 },
+                { code: 'CEY-TEA-002', name: 'Ceylon Green Tea (250g)', price: 850.00, quantity: 30 },
+                { code: 'CEY-RUB-001', name: 'Cinnamon Powder (100g)', price: 450.00, quantity: 40 },
+                { code: 'CEY-RUB-002', name: 'Curry Powder (200g)', price: 320.00, quantity: 60 },
+                { code: 'CEY-COC-001', name: 'Coconut Oil (500ml)', price: 680.00, quantity: 25 },
+                { code: 'CEY-SPI-001', name: 'Chili Powder (100g)', price: 280.00, quantity: 45 },
+                { code: 'CEY-SWE-001', name: 'Jaggery (1kg)', price: 420.00, quantity: 35 },
+                { code: 'CEY-RIC-001', name: 'Basmati Rice (5kg)', price: 1850.00, quantity: 20 },
+                { code: 'CEY-SAU-001', name: 'Maldive Fish (200g)', price: 750.00, quantity: 15 },
+                { code: 'CEY-SNA-001', name: 'Murukku (250g)', price: 380.00, quantity: 50 }
+            ];
+
+            sampleProducts.forEach(product => {
+                try {
+                    this.productModel.createProduct(product);
+                } catch (error) {
+                    console.error('Error creating sample product:', error);
+                }
+            });
+            console.log('Sample product data loaded');
+        }
     }
+
 }
+
+
 
 // Initialize the application when DOM is ready
 $(document).ready(function() {
