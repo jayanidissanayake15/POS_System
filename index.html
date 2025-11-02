@@ -128,12 +128,176 @@
 
             <!-- Customers Section -->
             <div id="customers-section" class="section hidden">
-                <!-- Customer management UI -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Customer Management</h2>
+                    <button class="btn btn-primary" id="add-customer-btn">
+                        <i class="fas fa-plus me-2"></i>Add Customer
+                    </button>
+                </div>
+
+                <!-- Customer Form -->
+                <div class="card mb-4 hidden" id="customer-form">
+                    <div class="card-header bg-primary text-white">
+                        <h5 id="customer-form-title">Add New Customer</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="customer-form-data">
+                            <input type="hidden" id="customer-id">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="customer-name" class="form-label">Name *</label>
+                                    <input type="text" class="form-control" id="customer-name" required>
+                                    <div class="invalid-feedback">Please enter customer name</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="customer-phone" class="form-label">Phone *</label>
+                                    <input type="text" class="form-control" id="customer-phone" required>
+                                    <div class="invalid-feedback">Please enter valid phone number</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customer-address" class="form-label">Address</label>
+                                <textarea class="form-control" id="customer-address" rows="3"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" id="cancel-customer-btn">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Customer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Customers Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="customers-table-body">
+                                <!-- Customers will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Items Section -->
             <div id="items-section" class="section hidden">
-                <!-- Product management UI -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2>Product Management</h2>
+                    <button class="btn btn-primary" id="add-item-btn">
+                        <i class="fas fa-plus me-2"></i>Add Product
+                    </button>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search"></i>
+                        </span>
+                                    <input type="text" class="form-control" id="product-search" placeholder="Search products...">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" id="stock-filter">
+                                    <option value="all">All Stock</option>
+                                    <option value="in-stock">In Stock</option>
+                                    <option value="low-stock">Low Stock</option>
+                                    <option value="out-of-stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-outline-secondary w-100" id="clear-filters">
+                                    <i class="fas fa-times me-1"></i>Clear Filters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Form -->
+                <div class="card mb-4 hidden" id="item-form">
+                    <div class="card-header bg-primary text-white">
+                        <h5 id="item-form-title">Add New Product</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="item-form-data">
+                            <input type="hidden" id="item-id">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="item-code" class="form-label">Product Code *</label>
+                                    <input type="text" class="form-control" id="item-code" required>
+                                    <div class="form-text">Unique code for the product (e.g., CEY-TEA-001)</div>
+                                    <div class="invalid-feedback">Please enter a product code</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="item-name" class="form-label">Product Name *</label>
+                                    <input type="text" class="form-control" id="item-name" required>
+                                    <div class="invalid-feedback">Please enter a product name</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="item-price" class="form-label">Unit Price (LKR) *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">LKR</span>
+                                        <input type="number" class="form-control" id="item-price" min="0" step="0.01" required>
+                                    </div>
+                                    <div class="invalid-feedback">Please enter a valid price</div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="item-quantity" class="form-label">Quantity *</label>
+                                    <input type="number" class="form-control" id="item-quantity" min="0" required>
+                                    <div class="invalid-feedback">Please enter a valid quantity</div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-secondary me-2" id="cancel-item-btn">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save Product</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Products List</h6>
+                        <span class="badge bg-primary" id="products-count">0 products</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Product Name</th>
+                                    <th>Price (LKR)</th>
+                                    <th>Quantity</th>
+                                    <th>Stock Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="items-table-body">
+                                <!-- Products will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Orders Section -->
