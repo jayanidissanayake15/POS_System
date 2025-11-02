@@ -10,7 +10,6 @@ class OrderController {
     }
 
     init() {
-        // Order placement events
         this.orderView.bindAddItemToOrder(this.handleAddItemToOrder.bind(this));
         this.orderView.bindQuantityChange(this.handleQuantityChange.bind(this));
         this.orderView.bindRemoveItem(this.handleRemoveItem.bind(this));
@@ -19,13 +18,10 @@ class OrderController {
         this.orderView.bindAddSampleItems(this.handleAddSampleItems.bind(this));
         this.orderView.bindCustomerSelect(this.handleCustomerSelect.bind(this));
 
-        // Order history events
         this.orderView.bindRefreshOrders(this.handleRefreshOrders.bind(this));
         this.orderView.bindOrderFilters(this.handleOrderFilters.bind(this));
         this.orderView.bindClearOrderFilters(this.handleClearOrderFilters.bind(this));
         this.orderView.bindViewOrder(this.handleViewOrder.bind(this));
-
-        console.log('OrderController initialized');
     }
 
     showOrderForm() {
@@ -37,10 +33,7 @@ class OrderController {
             this.orderView.renderAvailableProducts(availableProducts);
             this.orderView.clearOrderForm();
             this.orderView.show();
-
-            console.log('Order form loaded with', customers.length, 'customers and', availableProducts.length, 'available products');
         } catch (error) {
-            console.error('Error loading order form:', error);
             this.orderView.showAlert('Error loading order form: ' + error.message, 'error');
         }
     }
@@ -50,10 +43,7 @@ class OrderController {
             this.currentOrders = this.orderModel.getAllOrders();
             this.orderView.renderOrderHistory(this.currentOrders);
             this.orderView.showOrderHistory();
-
-            console.log('Order history loaded with', this.currentOrders.length, 'orders');
         } catch (error) {
-            console.error('Error loading order history:', error);
             this.orderView.showAlert('Error loading order history: ' + error.message, 'error');
         }
     }
@@ -65,7 +55,6 @@ class OrderController {
                 this.orderView.addItemToOrder(product);
             }
         } catch (error) {
-            console.error('Error adding item:', error);
             this.orderView.showAlert('Error adding item: ' + error.message, 'error');
         }
     }
@@ -86,7 +75,6 @@ class OrderController {
                 this.orderView.showAlert(`Only ${item.quantity} units of ${item.name} available`, 'warning');
             }
         } catch (error) {
-            console.error('Error updating quantity:', error);
             this.orderView.showAlert('Error updating quantity: ' + error.message, 'error');
         }
     }
@@ -97,7 +85,6 @@ class OrderController {
         this.orderView.updateItemsCount();
         this.orderView.updatePlaceOrderButton();
 
-        // Show empty state if no items left
         if ($('.order-item').length === 0) {
             this.orderView.clearOrderForm();
         }
@@ -107,7 +94,6 @@ class OrderController {
         try {
             const orderData = this.orderView.getOrderData();
 
-            // Validate order
             if (!orderData.customerId) {
                 this.orderView.showAlert('Please select a customer', 'error');
                 return;
@@ -118,14 +104,12 @@ class OrderController {
                 return;
             }
 
-            // Get customer name
             const customer = this.customerController.getCustomerById(parseInt(orderData.customerId));
             if (!customer) {
                 this.orderView.showAlert('Selected customer not found', 'error');
                 return;
             }
 
-            // Create order
             const order = {
                 customerId: parseInt(orderData.customerId),
                 customerName: customer.name,
@@ -138,19 +122,14 @@ class OrderController {
             this.orderView.showOrderSuccess(createdOrder);
             this.orderView.clearOrderForm();
 
-            // Refresh available products
             const availableProducts = this.productController.getAvailableProducts();
             this.orderView.renderAvailableProducts(availableProducts);
 
-            // Notify dashboard to refresh stats
             if (this.onOrderUpdate) {
                 this.onOrderUpdate();
             }
 
-            console.log('Order placed successfully:', createdOrder);
-
         } catch (error) {
-            console.error('Error placing order:', error);
             this.orderView.showAlert('Error placing order: ' + error.message, 'error');
         }
     }
@@ -169,7 +148,6 @@ class OrderController {
                 return;
             }
 
-            // Add first 3 available products as sample
             const sampleProducts = availableProducts.slice(0, 3);
             sampleProducts.forEach(product => {
                 this.orderView.addItemToOrder(product);
@@ -177,7 +155,6 @@ class OrderController {
 
             this.orderView.showAlert(`Added ${sampleProducts.length} sample items to order`);
         } catch (error) {
-            console.error('Error adding sample items:', error);
             this.orderView.showAlert('Error adding sample items: ' + error.message, 'error');
         }
     }
@@ -191,7 +168,6 @@ class OrderController {
         }
     }
 
-    // Order History Methods
     handleRefreshOrders() {
         this.showOrderHistory();
         this.orderView.showAlert('Order history refreshed');
@@ -205,7 +181,6 @@ class OrderController {
 
             let filteredOrders = this.currentOrders;
 
-            // Apply date filter
             if (dateFilter !== 'all') {
                 const now = new Date();
                 filteredOrders = filteredOrders.filter(order => {
@@ -225,19 +200,16 @@ class OrderController {
                 });
             }
 
-            // Apply customer filter
             if (customerFilter !== 'all') {
                 filteredOrders = filteredOrders.filter(order => order.customerId === parseInt(customerFilter));
             }
 
-            // Apply status filter
             if (statusFilter !== 'all') {
                 filteredOrders = filteredOrders.filter(order => order.status === statusFilter);
             }
 
             this.orderView.renderOrderHistory(filteredOrders);
         } catch (error) {
-            console.error('Error filtering orders:', error);
             this.orderView.showAlert('Error filtering orders: ' + error.message, 'error');
         }
     }
@@ -258,7 +230,6 @@ class OrderController {
                 this.orderView.showAlert('Order not found', 'error');
             }
         } catch (error) {
-            console.error('Error loading order details:', error);
             this.orderView.showAlert('Error loading order details: ' + error.message, 'error');
         }
     }
@@ -279,7 +250,7 @@ class OrderController {
                                     <table class="table table-sm">
                                         <tr>
                                             <td><strong>Name:</strong></td>
-                                            <td>${this.orderView.escapeHtml(order.customerName)}</td>
+                                            <td>${order.customerName}</td>
                                         </tr>
                                         <tr>
                                             <td><strong>Order Date:</strong></td>
@@ -306,7 +277,7 @@ class OrderController {
                                 <tbody>
                                     ${order.items.map(item => `
                                         <tr>
-                                            <td>${this.orderView.escapeHtml(item.name)}</td>
+                                            <td>${item.name}</td>
                                             <td>LKR ${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                                             <td>${item.quantity}</td>
                                             <td>LKR ${(item.price * item.quantity).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
@@ -323,27 +294,19 @@ class OrderController {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" onclick="window.print()">
-                                <i class="fas fa-print me-1"></i>Print
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         `;
 
-        // Remove existing modal
         $('#orderDetailsModal').remove();
-
-        // Add new modal to body
         $('body').append(modalHtml);
 
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
         modal.show();
     }
 
-    // Public methods for other controllers
     getAllOrders() {
         return this.orderModel.getAllOrders();
     }
@@ -356,7 +319,6 @@ class OrderController {
         return this.orderModel.getTotalRevenue();
     }
 
-    // Callback for dashboard updates
     setOnOrderUpdate(callback) {
         this.onOrderUpdate = callback;
     }

@@ -6,19 +6,6 @@ class OrderView {
         this.availableItemsList = $('#available-items-list');
         this.customerSelect = $('#order-customer');
         this.customerDetails = $('#customer-details');
-        this.init();
-    }
-
-    init() {
-        this.setupEventListeners();
-    }
-
-    setupEventListeners() {
-        // Customer selection change
-        this.customerSelect.on('change', this.handleCustomerChange.bind(this));
-
-        // Product search in order section
-        $('#product-search-order').on('input', this.handleProductSearch.bind(this));
     }
 
     show() {
@@ -44,14 +31,6 @@ class OrderView {
         customers.forEach(customer => {
             this.customerSelect.append(`<option value="${customer.id}">${customer.name} - ${customer.phone}</option>`);
         });
-
-        // Also populate customer filter in order history
-        const customerFilter = $('#customer-filter');
-        customerFilter.empty();
-        customerFilter.append('<option value="all">All Customers</option>');
-        customers.forEach(customer => {
-            customerFilter.append(`<option value="${customer.id}">${customer.name}</option>`);
-        });
     }
 
     renderAvailableProducts(products) {
@@ -62,7 +41,6 @@ class OrderView {
                 <div class="list-group-item text-center text-muted py-4">
                     <i class="fas fa-box-open fa-2x mb-3"></i>
                     <p>No products available</p>
-                    <small>Add products in the Products section first</small>
                 </div>
             `);
         } else {
@@ -74,8 +52,8 @@ class OrderView {
                     <div class="list-group-item list-group-item-action pointer available-item" data-id="${product.id}">
                         <div class="d-flex justify-content-between align-items-start">
                             <div class="flex-grow-1">
-                                <h6 class="mb-1">${this.escapeHtml(product.name)}</h6>
-                                <small class="text-muted">${this.escapeHtml(product.code)}</small>
+                                <h6 class="mb-1">${product.name}</h6>
+                                <small class="text-muted">${product.code}</small>
                                 <div class="mt-1">
                                     <strong class="text-primary">LKR ${product.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong>
                                 </div>
@@ -91,28 +69,12 @@ class OrderView {
         }
     }
 
-    handleCustomerChange() {
-        const customerId = this.customerSelect.val();
-        if (customerId && this.onCustomerSelect) {
-            this.onCustomerSelect(customerId);
-        }
-        this.updatePlaceOrderButton();
-    }
-
-    handleProductSearch() {
-        const query = $('#product-search-order').val().toLowerCase();
-        $('.available-item').each(function() {
-            const productText = $(this).text().toLowerCase();
-            $(this).toggle(productText.includes(query));
-        });
-    }
-
     showCustomerDetails(customer) {
         if (customer) {
             this.customerDetails.html(`
-                <div class="fw-bold">${this.escapeHtml(customer.name)}</div>
-                <div>${this.escapeHtml(customer.phone)}</div>
-                <div class="small">${this.escapeHtml(customer.address || 'No address')}</div>
+                <div class="fw-bold">${customer.name}</div>
+                <div>${customer.phone}</div>
+                <div class="small">${customer.address || 'No address'}</div>
             `);
         } else {
             this.customerDetails.html('<span class="text-muted">Select a customer to view details</span>');
@@ -120,13 +82,6 @@ class OrderView {
     }
 
     addItemToOrder(item) {
-        // Check if item already exists in order
-        const existingItem = $(`.order-item[data-id="${item.id}"]`);
-        if (existingItem.length > 0) {
-            this.increaseItemQuantity(existingItem, item);
-            return;
-        }
-
         // Remove empty state if exists
         if ($('#order-items .text-center').length > 0) {
             this.orderItems.empty();
@@ -136,8 +91,8 @@ class OrderView {
             <div class="order-item border-bottom pb-3 mb-3" data-id="${item.id}">
                 <div class="row align-items-center">
                     <div class="col-md-5">
-                        <h6 class="mb-1">${this.escapeHtml(item.name)}</h6>
-                        <small class="text-muted">${this.escapeHtml(item.code)}</small>
+                        <h6 class="mb-1">${item.name}</h6>
+                        <small class="text-muted">${item.code}</small>
                         <div class="mt-1">
                             <strong class="text-success">LKR ${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong>
                         </div>
@@ -172,18 +127,6 @@ class OrderView {
         this.updatePlaceOrderButton();
     }
 
-    increaseItemQuantity(itemElement, item) {
-        const quantityInput = itemElement.find('.item-quantity');
-        const currentQuantity = parseInt(quantityInput.val());
-        if (currentQuantity < item.quantity) {
-            quantityInput.val(currentQuantity + 1);
-            this.updateItemTotal(itemElement, item.price);
-            this.updateOrderSummary();
-        } else {
-            this.showAlert(`Only ${item.quantity} units of ${item.name} available`, 'warning');
-        }
-    }
-
     updateItemTotal(itemElement, price) {
         const quantity = parseInt(itemElement.find('.item-quantity').val());
         const total = (quantity * price);
@@ -198,7 +141,7 @@ class OrderView {
             subtotal += itemTotal;
         });
 
-        const tax = 0; // You can add tax calculation here
+        const tax = 0;
         const total = subtotal + tax;
 
         $('#order-subtotal').text('LKR ' + subtotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}));
@@ -286,20 +229,16 @@ class OrderView {
 
                 tbody.append(`
                     <tr>
-                        <td>
-                            <strong>#${order.id}</strong>
-                        </td>
-                        <td>${this.escapeHtml(order.customerName)}</td>
-                        <td>
-                            <small title="${itemsList}">${itemsList.length > 50 ? itemsList.substring(0, 50) + '...' : itemsList}</small>
-                        </td>
-                        <td class="fw-bold">LKR ${order.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td>#${order.id}</td>
+                        <td>${order.customerName}</td>
+                        <td>${itemsList}</td>
+                        <td>LKR ${order.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                         <td>${new Date(order.date).toLocaleDateString()}</td>
                         <td>
                             <span class="badge ${statusClass}">${order.status}</span>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-info view-order" data-id="${order.id}" title="View Details">
+                            <button class="btn btn-sm btn-outline-info view-order" data-id="${order.id}">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </td>
@@ -324,7 +263,6 @@ class OrderView {
         }
     }
 
-    // Utility Methods
     getStockStatus(quantity) {
         if (quantity === 0) return 'Out of Stock';
         if (quantity <= 10) return 'Low Stock';
@@ -338,16 +276,6 @@ class OrderView {
             case 'Out of Stock': return 'bg-danger';
             default: return 'bg-secondary';
         }
-    }
-
-    escapeHtml(unsafe) {
-        if (!unsafe) return '';
-        return unsafe
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
     }
 
     // Event Binding Methods
@@ -398,7 +326,13 @@ class OrderView {
     }
 
     bindCustomerSelect(handler) {
-        this.onCustomerSelect = handler;
+        this.customerSelect.on('change', () => {
+            const customerId = this.customerSelect.val();
+            if (customerId) {
+                handler(customerId);
+            }
+            this.updatePlaceOrderButton();
+        });
     }
 
     // Order History Event Bindings
@@ -422,27 +356,7 @@ class OrderView {
     }
 
     showAlert(message, type = 'success') {
-        // Remove existing alerts
-        $('.alert-dismissible').alert('close');
-
-        const alertClass = type === 'error' ? 'danger' : type;
-        const icon = type === 'error' ? 'exclamation-triangle' : 'check-circle';
-
-        const alert = $(`
-            <div class="alert alert-${alertClass} alert-dismissible fade show" role="alert">
-                <i class="fas fa-${icon} me-2"></i>
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        `);
-
-        // Add to page before the current section
-        this.section.before(alert);
-
-        // Auto remove after 5 seconds
-        setTimeout(() => {
-            alert.alert('close');
-        }, 5000);
+        alert(`${type.toUpperCase()}: ${message}`);
     }
 
     showOrderSuccess(order) {
@@ -464,49 +378,26 @@ class OrderView {
                             <div class="row">
                                 <div class="col-md-6">
                                     <strong>Customer:</strong><br>
-                                    ${this.escapeHtml(order.customerName)}
+                                    ${order.customerName}
                                 </div>
                                 <div class="col-md-6">
                                     <strong>Total:</strong><br>
                                     LKR ${order.total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
                                 </div>
                             </div>
-                            <div class="mt-3">
-                                <strong>Items:</strong>
-                                <ul class="list-group list-group-flush mt-2">
-                                    ${order.items.map(item => `
-                                        <li class="list-group-item d-flex justify-content-between">
-                                            <span>${this.escapeHtml(item.name)}</span>
-                                            <span>${item.quantity} x LKR ${item.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
-                                        </li>
-                                    `).join('')}
-                                </ul>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="print-order">
-                                <i class="fas fa-print me-1"></i>Print Receipt
-                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         `;
 
-        // Remove existing modal
         $('#orderSuccessModal').remove();
-
-        // Add new modal to body
         $('body').append(modalHtml);
 
-        // Show modal
         const modal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
         modal.show();
-
-        // Bind print button
-        $('#print-order').on('click', () => {
-            window.print();
-        });
     }
 }

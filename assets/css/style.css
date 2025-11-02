@@ -57,3 +57,18 @@
     margin-bottom: 10px;
     border-radius: 2px;
 }
+
+/* Additional styles for order history */
+.badge {
+    font-size: 0.75em;
+}
+.list-group-item {
+    transition: all 0.2s;
+}
+.list-group-item:hover {
+    background-color: #f8f9fa;
+}
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
