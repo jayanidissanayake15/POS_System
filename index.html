@@ -8,22 +8,25 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --success: #4cc9f0;
-            --info: #4895ef;
-            --warning: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --orange: #fd7e14;
-            --card-bg: #ffffff;
-            --sidebar-bg: #2d3748;
-            --sidebar-hover: #4a5568;
+            --primary: #536dfe;
+            --secondary: #303f9f;
+            --success: #00e676;
+            --info: #00b0ff;
+            --warning: #ffb300;
+            --danger: #f44336;
+            --light: #2c3e50;
+            --dark: #eceff1;
+            --orange: #ff6e40;
+            --card-bg: #1e272e;
+            --body-bg: #141d26;
+            --border-color: #3f51b5;
+            --input-bg: #29313a;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--body-bg);
+            color: var(--dark);
             min-height: 100vh;
         }
 
@@ -32,10 +35,10 @@
             margin: 80px auto;
             padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            background: var(--card-bg);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-color);
         }
 
         .auth-header {
@@ -62,13 +65,13 @@
         }
 
         .nav-bar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(90deg, var(--secondary) 0%, #1a237e 100%);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             padding: 15px 0;
         }
 
         .nav-pills .nav-link {
-            color: white;
+            color: var(--dark);
             font-weight: 600;
             padding: 12px 20px;
             margin: 0 5px;
@@ -78,30 +81,27 @@
 
         .nav-pills .nav-link:hover,
         .nav-pills .nav-link.active {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
             transform: translateY(-2px);
         }
 
-        .dashboard-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .dashboard-card-wrapper {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             border: none;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             color: white;
             padding: 30px;
             margin-bottom: 30px;
             transition: transform 0.3s ease;
         }
 
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-        }
-
         .stat-card {
-            background: white;
+            background: var(--card-bg);
             border: none;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             padding: 25px;
             height: 100%;
             transition: all 0.3s ease;
@@ -110,7 +110,7 @@
 
         .stat-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
         .stat-card .card-title {
@@ -127,31 +127,41 @@
         }
 
         .form-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             padding: 30px;
             margin-bottom: 30px;
         }
 
-        .form-control {
-            border: 2px solid #e9ecef;
+        .form-control, .form-select {
+            border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 12px 15px;
             transition: all 0.3s ease;
+            background-color: var(--input-bg);
+            color: var(--dark);
         }
 
-        .form-control:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+        .form-control:focus, .form-select:focus {
+            border-color: var(--success);
+            box-shadow: 0 0 0 0.2rem rgba(0, 230, 118, 0.25);
+            background-color: var(--input-bg);
+            color: var(--dark);
+        }
+
+        .form-label {
+            color: var(--dark);
         }
 
         .btn {
             border-radius: 10px;
-            padding: 12px 25px;
+            padding: 10px 15px;
             font-weight: 600;
             transition: all 0.3s ease;
             border: none;
+            color: white !important;
+            font-size: 14px; /* Slightly smaller font */
         }
 
         .btn-primary {
@@ -159,33 +169,49 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+            background: linear-gradient(135deg, var(--success) 0%, #1de9b6 100%);
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
+            background: linear-gradient(135deg, var(--warning) 0%, #ff6f00 100%);
             color: white;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+            background: linear-gradient(135deg, var(--danger) 0%, #d32f2f 100%);
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
         }
 
+        .form-container .btn-group-responsive {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        .form-container .btn-group-responsive button {
+            flex-grow: 1;
+            min-width: 45%;
+            max-width: 48%;
+        }
+
+
         .table-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             padding: 25px;
             overflow: hidden;
         }
 
         .table {
             margin-bottom: 0;
+            color: var(--dark);
         }
 
         .table thead th {
@@ -198,22 +224,22 @@
 
         .table tbody td {
             padding: 15px;
-            border-color: #f1f3f4;
+            border-color: #3e4d5d;
             vertical-align: middle;
         }
 
         .table tbody tr:hover {
-            background-color: #f8f9fa;
+            background-color: #2c3e50;
             transform: scale(1.01);
             transition: all 0.2s ease;
         }
 
         .search-box {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .order-grid {
@@ -224,9 +250,9 @@
         }
 
         .order-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             padding: 25px;
             height: 100%;
         }
@@ -241,7 +267,7 @@
         }
 
         .total-price-card {
-            background: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
+            background: linear-gradient(135deg, #00b0ff 0%, #00e5ff 100%);
             color: white;
             border-radius: 20px;
             padding: 25px;
@@ -266,7 +292,7 @@
             padding: 25px;
             text-align: center;
             margin-bottom: 30px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         .section-title h5 {
@@ -283,7 +309,7 @@
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .main-content {
@@ -389,7 +415,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="item_nav">
-                        <i class="bi bi-box-seam me-1"></i>INVENTORY
+                        <i class="bi bi-box-seam me-1"></i>ITEMS
                     </a>
                 </li>
                 <li class="nav-item">
@@ -417,42 +443,45 @@
                 <div class="section-title">
                     <h5><i class="bi bi-speedometer2 me-2"></i>DASHBOARD OVERVIEW</h5>
                 </div>
-                <div class="row">
-                    <div class="col-md-4 mb-4">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="icon-wrapper bg-primary">
-                                    <i class="bi bi-people text-white fs-4"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title">TOTAL CUSTOMERS</h5>
-                                    <p class="card-text" id="customerCount">0</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="icon-wrapper bg-success">
-                                    <i class="bi bi-box-seam text-white fs-4"></i>
-                                </div>
-                                <div>
-                                    <h5 class="card-title">PRODUCTS IN STOCK</h5>
-                                    <p class="card-text" id="itemCount">0</p>
+
+                <div class="dashboard-card-wrapper">
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-wrapper bg-primary">
+                                        <i class="bi bi-people text-white fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="card-title">TOTAL CUSTOMERS</h5>
+                                        <p class="card-text" id="customerCount">0</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="stat-card">
-                            <div class="d-flex align-items-center">
-                                <div class="icon-wrapper bg-warning">
-                                    <i class="bi bi-cart text-white fs-4"></i>
+                        <div class="col-md-4 mb-4">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-wrapper bg-success">
+                                        <i class="bi bi-box-seam text-white fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="card-title">PRODUCTS IN STOCK</h5>
+                                        <p class="card-text" id="itemCount">0</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h5 class="card-title">TOTAL ORDERS</h5>
-                                    <p class="card-text" id="orderCount">0</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="stat-card">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-wrapper bg-warning">
+                                        <i class="bi bi-cart text-white fs-4"></i>
+                                    </div>
+                                    <div>
+                                        <h5 class="card-title">TOTAL ORDERS</h5>
+                                        <p class="card-text" id="orderCount">0</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -467,7 +496,7 @@
                     <h5><i class="bi bi-people me-2"></i>CUSTOMER MANAGEMENT</h5>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-4 mb-4">
                         <div class="form-container">
                             <form>
                                 <div class="mb-3">
@@ -494,14 +523,15 @@
                                     <label for="contact" class="form-label">Contact Number</label>
                                     <input type="text" class="form-control" id="contact">
                                 </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                                    <button type="button" class="btn btn-success me-md-2" id="customerSaveButton">
+
+                                <div class="btn-group-responsive">
+                                    <button type="button" class="btn btn-success" id="customerSaveButton">
                                         <i class="bi bi-check-lg me-1"></i>Save
                                     </button>
-                                    <button type="button" class="btn btn-primary me-md-2" id="customerUpdateButton">
+                                    <button type="button" class="btn btn-primary" id="customerUpdateButton">
                                         <i class="bi bi-arrow-clockwise me-1"></i>Update
                                     </button>
-                                    <button type="button" class="btn btn-danger me-md-2" id="customerDeleteButton">
+                                    <button type="button" class="btn btn-danger" id="customerDeleteButton">
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </button>
                                     <button type="reset" class="btn btn-warning" id="customerClearButton">
@@ -512,7 +542,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <div class="search-box">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="customer_search" placeholder="Search customer by name...">
@@ -528,6 +558,7 @@
                                     <th>ID</th>
                                     <th>First Name</th>
                                     <th>Last Name</th>
+                                    <th>Address</th>
                                     <th>Email</th>
                                     <th>Contact</th>
                                 </tr>
@@ -544,10 +575,10 @@
         <main class="Items hidden" id="ItemSection">
             <div class="container">
                 <div class="section-title">
-                    <h5><i class="bi bi-box-seam me-2"></i>INVENTORY MANAGEMENT</h5>
+                    <h5><i class="bi bi-box-seam me-2"></i>ITEM MANAGEMENT</h5>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-4 mb-4">
                         <div class="form-container">
                             <form>
                                 <div class="mb-3">
@@ -563,21 +594,22 @@
                                     <input type="text" class="form-control" id="Quantity">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="UnitPrice" class="form-label">Unit Price ($)</label>
+                                    <label for="UnitPrice" class="form-label">Unit Price (LKR)</label>
                                     <input type="text" class="form-control" id="UnitPrice">
                                 </div>
                                 <div class="mb-3">
                                     <label for="Description" class="form-label">Description</label>
                                     <textarea class="form-control" id="Description" style="height: 80px"></textarea>
                                 </div>
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                                    <button type="button" class="btn btn-success me-md-2" id="itemSaveButton">
+
+                                <div class="btn-group-responsive">
+                                    <button type="button" class="btn btn-success" id="itemSaveButton">
                                         <i class="bi bi-check-lg me-1"></i>Save
                                     </button>
-                                    <button type="button" class="btn btn-primary me-md-2" id="itemUpdateButton">
+                                    <button type="button" class="btn btn-primary" id="itemUpdateButton">
                                         <i class="bi bi-arrow-clockwise me-1"></i>Update
                                     </button>
-                                    <button type="button" class="btn btn-danger me-md-2" id="itemDeleteButton">
+                                    <button type="button" class="btn btn-danger" id="itemDeleteButton">
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </button>
                                     <button type="reset" class="btn btn-warning" id="itemClearButton">
@@ -588,7 +620,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-6">
+                    <div class="col-lg-8">
                         <div class="search-box">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="item_search" placeholder="Search item by name...">
@@ -670,7 +702,7 @@
                                 <input type="text" class="form-control" id="orderItemName" placeholder="Item Name">
                             </div>
                             <div class="mb-3">
-                                <label for="orderItemPrice" class="form-label">Item Price ($)</label>
+                                <label for="orderItemPrice" class="form-label">Item Price (LKR)</label>
                                 <input type="text" class="form-control" id="orderItemPrice" placeholder="Item Unit Price">
                             </div>
                             <div class="mb-3">
@@ -696,10 +728,10 @@
                         <div class="card-body">
                             <div class="total-price-card mb-4">
                                 <h1>TOTAL AMOUNT</h1>
-                                <h2 id="totalAmount">$0.00</h2>
+                                <h2 id="totalAmount">LKR0.00</h2>
                             </div>
                             <div class="mb-3">
-                                <label for="cash" class="form-label">Cash Amount ($)</label>
+                                <label for="cash" class="form-label">Cash Amount (LKR)</label>
                                 <input type="text" class="form-control" id="cash" placeholder="Cash Amount">
                             </div>
                             <div class="mb-3">
@@ -707,7 +739,7 @@
                                 <input type="number" class="form-control" id="discount" placeholder="Discount Amount">
                             </div>
                             <div class="mb-3">
-                                <label for="balance" class="form-label">Balance ($)</label>
+                                <label for="balance" class="form-label">Balance (LKR)</label>
                                 <input type="text" class="form-control" id="balance" placeholder="Balance">
                             </div>
                             <div class="d-grid gap-2">
